@@ -205,3 +205,21 @@ docker run -p 4443:4443 --rm -e OPENVIDU_SECRET=MY_SECRET openvidu/openvidu-serv
 ```
 
 - node 버전확인, 도커환경 구축
+
+## 0725 WebRTC 배포과정
+
+1. **EC2 서버 생성**: AWS 콘솔 또는 CLI를 사용하여 EC2 인스턴스를 생성합니다. 인스턴스를 만들 때 SSH 키를 생성하고 EC2 보안 그룹에서 필요한 포트(예: 22번 포트는 SSH 접근, 80번 포트는 HTTP 접근 등)를 열어줍니다.
+    1. **HTTP (80번 포트) 및 HTTPS (443번 포트)**: Nginx와 OpenVidu를 설치한 경우, 웹 서비스를 위해 HTTP와 HTTPS 포트가 필요합니다. HTTP 포트는 80번, HTTPS 포트는 443번을 사용하는 것이 일반적입니다.
+    2. **OpenVidu 사용에 필요한 포트들**: OpenVidu는 WebRTC 기반의 화상회의를 지원하는 데 사용되며, 다양한 미디어와 시그널링 서버 간의 통신을 위해 여러 포트들이 필요할 수 있습니다. OpenVidu의 문서를 참조하여 필요한 포트들을 확인하세요.
+2. **Docker 설치**: EC2 인스턴스에 Docker를 설치합니다. Docker는 애플리케이션을 컨테이너로 패키징하고 실행하는 데 도움이 됩니다.
+3. **Nginx 설치**: Nginx는 웹 서버로 사용되며, HTTPS 통신을 위해 SSL 인증서를 적용할 수 있습니다. Nginx를 설치하고 설정합니다.
+    1. 주요 설정 파일 - /etc/nginx 아래 nginx.conf / sites-available/default
+4. **OpenVidu 설치**: OpenVidu는 WebRTC를 사용하여 실시간 화상회의를 구현하는 데 도움이 됩니다. OpenVidu를 Docker 컨테이너로 실행합니다.
+5. **SSL 인증서 발급**: HTTPS 통신을 위해 SSL 인증서가 필요합니다. Let's Encrypt와 certbot을 사용하여 무료 SSL 인증서를 발급받을 수 있습니다.
+6. **Nginx에서 SSL 적용**: 발급받은 SSL 인증서를 Nginx에 적용하여 HTTPS로 보안된 통신을 구현합니다.
+7. **도메인 연결**: 만약 도메인을 보유하고 있다면, 해당 도메인을 EC2 인스턴스와 연결하여 도메인으로 서비스에 접근할 수 있도록 설정합니다.
+
+실패 -> openvidu 접속불가 -> kms는 로컬용
+
+openvidu on premise 참고 재배포
+![openvidu](https://github.com/DongIkkk/TIL/assets/110454344/d751df6f-3c50-46fa-abec-44b7452b0ebb)
